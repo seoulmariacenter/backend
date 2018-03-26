@@ -33,11 +33,12 @@ ALLOWED_HOSTS = []
 
 # Application definition
 THIRD_PARTY_APPS = [
-
+    'django_extensions',
 ]
 
 USER_APPS = [
-
+    'flight',
+    'travel',
 ]
 
 INSTALLED_APPS = [
