@@ -33,12 +33,14 @@ class Transport(models.Model):
     flight_code = models.CharField(max_length=10)
     start_IATA = models.ForeignKey(
         IATACode,
+        related_name='start_airport',
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
     )
     end_IATA = models.ForeignKey(
         IATACode,
+        related_name='end_airport',
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
