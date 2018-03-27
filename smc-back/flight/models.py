@@ -45,11 +45,11 @@ class Transport(models.Model):
         blank=True,
         null=True,
     )
-    start_time = models.DateField(
+    start_time = models.DateTimeField(
         blank=True,
         null=True,
     )
-    end_time = models.DateField(
+    end_time = models.DateTimeField(
         blank=True,
         null=True,
     )
