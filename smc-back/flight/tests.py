@@ -1,7 +1,7 @@
 from django.urls import reverse, resolve
 from rest_framework.test import APILiveServerTestCase
 
-from flight.management.commands import migrate_iata
+from .management.commands import migrate_iata
 from .models import IATACode
 from .apis import IATACodeList
 
