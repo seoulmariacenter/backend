@@ -42,6 +42,7 @@ class IATATest(APILiveServerTestCase):
         queryset = IATACode.objects.all()
         response = self.client.get(self.URL_API_IATA, format='json')
 
-        # 
+        # 응답코드가 정상인가?
         self.assertEqual(response.status_code, 200)
+        # response에 담긴 데이터 갯수와 queryset의 데이터 갯수가 같은가?
         self.assertEqual(len(response.data), queryset.count())
