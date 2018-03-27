@@ -5,5 +5,5 @@ from . import apis
 app_name = 'flight'
 
 urlpatterns = [
-    path('iata/', apis.IATACodeCreateRetrieve.as_view(), name='iata'),
+    path('iata/', apis.IATACodeList.as_view(), name='iata'),
 ]

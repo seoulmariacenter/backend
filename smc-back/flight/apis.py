@@ -1,13 +1,11 @@
-import json
-
-from django.http import HttpResponse
 from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import IATACode
 
 
-class IATACodeCreateRetrieve(APIView):
+class IATACodeList(APIView):
     """
     IATA 코드 목록을 불러오는 뷰
     """
@@ -20,8 +18,5 @@ class IATACodeCreateRetrieve(APIView):
         for item in self.queryset.all():
             data[str(item.korean_name)] = str(item.code_name)
 
-        # 퍼포먼스 향상을 위해 serializer, Response 함수는 쓰지 않고
-        # data를 json으로 직접 변환해 순수 HttpResponse에 파싱한다
-        return HttpResponse(json.dumps(data),
-                            content_type='application/json; charset=utf-8',
-                            status=status.HTTP_200_OK)
+        # 퍼포먼스 향상을 위해 serializer는 쓰지 않는다
+        return Response(data=data, status=status.HTTP_200_OK)
