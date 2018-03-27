@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 THIRD_PARTY_APPS = [
     'django_extensions',
+    'rest_framework',
 ]
 
 USER_APPS = [
@@ -81,6 +82,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+
+# Rest framework definition
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
