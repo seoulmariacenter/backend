@@ -1,6 +1,6 @@
-import json
-
 from datetime import datetime
+
+import pytz
 from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -30,14 +30,12 @@ class TransportCreate(APIView):
     Transport 객체를 생성하는 뷰
     """
     queryset_transport = Transport.objects.all()
-    queryset_iata = IATACode.objects.select_related('korean_name__korean_name').all()
+    queryset_iata = IATACode.objects.all()
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def post(self, request, *args, **kwargs):
-        # frontend에서 날아온 bytecode를 utf-8로 디코딩
-        body_unicode = request.body.decode('utf-8')
-        # 문자열을 json으로 불러옴
-        payload = json.loads(body_unicode)
+        # frontend에서 날아온 data를 payload 변수에 담는다
+        payload = request.data
 
         flight_code = payload['flight_code']
 
@@ -52,12 +50,12 @@ class TransportCreate(APIView):
 
         start_time_instance = datetime(
             int(start_year), int(start_month), int(start_day),
-            int(start_hour), int(start_minute)
+            int(start_hour), int(start_minute), tzinfo=pytz.UTC
         )
 
         end_time_instance = datetime(
             int(end_year), int(end_month), int(end_day),
-            int(end_hour), int(end_minute)
+            int(end_hour), int(end_minute), tzinfo=pytz.UTC
         )
 
         instance = Transport.objects.create(
