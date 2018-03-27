@@ -9,11 +9,23 @@ from .apis import IATACodeList, TransportCreate
 
 
 class DummyUser:
+    """
+    자주 쓰는 데이터를 미리 정의해 둔다
+    """
     def __init__(self):
-        self.data = {
+        self.data_succeed = {
             'flight_code': 'KE001',
             'start_iata': 'ICN',
             'end_iata': 'FCO',
+            'start_day': '2018-04-01',
+            'end_day': '2018-04-02',
+            'start_time': '12:00',
+            'end_time': '21:00'
+        }
+        self.data_failure = {
+            'flight_code': 'KE001',
+            'start_iata': 'ABC',
+            'end_iata': 'EFG',
             'start_day': '2018-04-01',
             'end_day': '2018-04-02',
             'start_time': '12:00',
@@ -139,8 +151,29 @@ class TransportTest(APILiveServerTestCase):
         self.assertTrue(login)
 
         # dummy user와 data를 이용해 tranport 객체를 생성해 본다
-        response = self.client.post(self.URL_API_TRANSPORT, data=dummy.data)
+        response = self.client.post(self.URL_API_TRANSPORT, data=dummy.data_succeed)
         # 응답 코드가 정상인가?
         self.assertEqual(response.status_code, 201)
         # response에 담긴 데이터와 dummy data가 같은가?
-        self.assertEqual(response.data['flight_code'], dummy.data['flight_code'])
+        self.assertEqual(response.data['flight_code'], dummy.data_succeed['flight_code'])
+
+    def test_transport_create_failure(self):
+        """
+        테스트 5. transport 객체 생성 실패 케이스를 테스트한다
+        """
+        # iata 데이터를 담는 커맨드를 실행한다
+        migrate_iata.Command().handle()
+
+        # dummy user를 생성하고 로그인한다
+        dummy = DummyUser()
+        dummy.create_user()
+        login = self.client.login(**dummy.user_info)
+        # 제대로 로그인 되었는가?
+        self.assertTrue(login)
+
+        # dummy user와 data를 이용해 tranport 객체를 생성해 본다
+        response = self.client.post(self.URL_API_TRANSPORT, data=dummy.data_failure)
+        # 응답 코드가 정상인가?
+        self.assertEqual(response.status_code, 400)
+        # 실패 메시지가 원하는 대로 출력되는가?
+        self.assertEqual(response.data['msg'], 'IATACode matching query does not exist.')
