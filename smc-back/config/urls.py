@@ -22,4 +22,5 @@ urlpatterns = [
 
 urlpatterns += [
     path('flight/', include('flight.urls', namespace='flight')),
+    path('travel/', include('travel.urls', namespace='travel')),
 ]
