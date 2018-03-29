@@ -60,3 +60,20 @@ class ProductTest(APILiveServerTestCase):
         response = self.client.post(self.URL_API_PRODUCT, data=dummy_data.product_data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['title'], dummy_data.product_data['title'])
+
+    def test_product_list(self):
+        """
+        테스트 4. product 객체의 리스트를 확인한다
+        """
+        dummy_user = self.dummy_user
+        dummy_user.create_user()
+        login = self.client.login(**dummy_user.user_info)
+        self.assertTrue(login)
+        dummy_data = DummyData()
+
+        for _ in range(1, 6):
+            self.client.post(self.URL_API_PRODUCT, data=dummy_data.product_data)
+
+        response = self.client.get(self.URL_API_PRODUCT)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['count'], 5)
