@@ -24,8 +24,13 @@ class Date(models.Model):
     date_time = models.DateField()
     product = models.ForeignKey(
         Product,
+        related_name='dates',
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        unique_together = ('product', 'date_time')
+        ordering = ['date_time']
 
     def __str__(self):
         return f'제 {self.date_num}일'
