@@ -9,10 +9,10 @@ from .apis import IATACodeList, TransportCreate
 
 
 class DummyUser:
-    """
-    자주 쓰는 데이터를 미리 정의해 둔다
-    """
     def __init__(self):
+        """
+        자주 쓰는 데이터를 미리 정의해 둔다
+        """
         self.data_succeed = {
             'flight_code': 'KE001',
             'start_iata': 'ICN',
