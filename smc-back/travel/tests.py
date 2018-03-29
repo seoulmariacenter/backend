@@ -28,6 +28,7 @@ class ProductTest(APILiveServerTestCase):
         self.PRODUCT_LC_VIEW_CLASS = ProductListCreate
         self.PRODUCT_RUD_VIEW_CLASS = ProductRetrieveUpdateDestroy
         self.dummy_user = DummyUser()
+        self.dummy_data = DummyData()
 
     def test_product_url_name_reverse(self):
         """
@@ -56,10 +57,9 @@ class ProductTest(APILiveServerTestCase):
         login = self.client.login(**dummy_user.user_info)
         self.assertTrue(login)
 
-        dummy_data = DummyData()
-        response = self.client.post(self.URL_API_PRODUCT, data=dummy_data.product_data)
+        response = self.client.post(self.URL_API_PRODUCT, data=self.dummy_data.product_data)
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data['title'], dummy_data.product_data['title'])
+        self.assertEqual(response.data['title'], self.dummy_data.product_data['title'])
 
     def test_product_list(self):
         """
@@ -69,11 +69,61 @@ class ProductTest(APILiveServerTestCase):
         dummy_user.create_user()
         login = self.client.login(**dummy_user.user_info)
         self.assertTrue(login)
-        dummy_data = DummyData()
 
+        # product 객체를 5개 생성한다
         for _ in range(1, 6):
-            self.client.post(self.URL_API_PRODUCT, data=dummy_data.product_data)
+            self.client.post(self.URL_API_PRODUCT, data=self.dummy_data.product_data)
 
         response = self.client.get(self.URL_API_PRODUCT)
+        # 응답 코드 및 생성된 객체 갯수를 확인한다
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['count'], 5)
+
+    def test_product_retrieve(self):
+        """
+        테스트 5. product 객체의 retrieve 테스트
+        """
+        dummy_user = self.dummy_user
+        dummy_user.create_user()
+        login = self.client.login(**dummy_user.user_info)
+        self.assertTrue(login)
+
+        response_create = self.client.post(self.URL_API_PRODUCT, data=self.dummy_data.product_data)
+        self.assertEqual(response_create.status_code, 201)
+
+        primary_key = str(response_create.data['pk']) + '/'
+        response_retrieve = self.client.get(self.URL_API_PRODUCT+primary_key)
+        self.assertEqual(response_retrieve.status_code, 200)
+
+    def test_product_update(self):
+        """
+        테스트 5. product 객체의 update 테스트
+        """
+        dummy_user = self.dummy_user
+        dummy_user.create_user()
+        login = self.client.login(**dummy_user.user_info)
+        self.assertTrue(login)
+
+        response_create = self.client.post(self.URL_API_PRODUCT, data=self.dummy_data.product_data)
+        self.assertEqual(response_create.status_code, 201)
+
+        primary_key = str(response_create.data['pk']) + '/'
+        response_update = self.client.patch(self.URL_API_PRODUCT+primary_key, data={'title': 'vietnam'})
+        self.assertEqual(response_update.status_code, 200)
+        self.assertEqual(response_update.data['title'], 'vietnam')
+
+    def test_product_delete(self):
+        """
+        테스트 6. product 객체의 delete 테스트
+        """
+        dummy_user = self.dummy_user
+        dummy_user.create_user()
+        login = self.client.login(**dummy_user.user_info)
+        self.assertTrue(login)
+
+        response_create = self.client.post(self.URL_API_PRODUCT, data=self.dummy_data.product_data)
+        self.assertEqual(response_create.status_code, 201)
+
+        primary_key = str(response_create.data['pk']) + '/'
+        response_delete = self.client.delete(self.URL_API_PRODUCT+primary_key)
+        self.assertEqual(response_delete.status_code, 204)
