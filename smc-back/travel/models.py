@@ -12,6 +12,9 @@ class Product(models.Model):
     end_time = models.DateField()
     price = models.CharField(max_length=10)
 
+    class Meta:
+        ordering = ['-start_time']
+
     def __str__(self):
         return self.title
 
