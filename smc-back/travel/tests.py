@@ -2,7 +2,9 @@ from django.urls import reverse, resolve
 from rest_framework.test import APILiveServerTestCase
 
 from flight.tests import DummyUser
-from .apis import ProductListCreate, ProductRetrieveUpdateDestroy
+from .apis import ProductListCreate, \
+    ProductRetrieveUpdateDestroy, \
+    DateListCreate, DateRetrieveUpdateDestroy
 
 
 class DummyData:
@@ -146,3 +148,53 @@ class ProductTest(APILiveServerTestCase):
         primary_key = str(response_create.data['pk']) + '/'
         response_delete = self.client.delete(self.URL_API_PRODUCT + primary_key)
         self.assertEqual(response_delete.status_code, 204)
+
+
+class DateTest(APILiveServerTestCase):
+    def setUp(self):
+        """
+        환경 변수 설정
+        """
+        self.URL_API_DATE_LC_NAME = 'travel:date_view'
+        self.URL_API_DATE_RUD_NAME = 'travel:date_detail'
+        self.URL_API_DATE = '/travel/product/1/date/'
+        self.DATE_LC_VIEW_CLASS = DateListCreate
+        self.DATE_RUD_VIEW_CLASS = DateRetrieveUpdateDestroy
+        self.dummy_user = DummyUser()
+        self.dummy_data = DummyData()
+
+    def test_date_lc_url_name_reverse(self):
+        """
+        테스트 1. url name과 실제 url이 일치하는가
+        """
+        url = reverse(self.URL_API_DATE_LC_NAME, args='1')
+        self.assertEqual(url, self.URL_API_DATE)
+
+    def test_date_lc_url_resolve_view_class(self):
+        """
+        테스트 2. url을 리졸브한 결과가 url name, view와 일치하는가
+        :return:
+        """
+        resolver_match = resolve(self.URL_API_DATE)
+        self.assertEqual(resolver_match.view_name,
+                         self.URL_API_DATE_LC_NAME)
+        self.assertEqual(resolver_match.func.view_class,
+                         self.DATE_LC_VIEW_CLASS)
+
+    def test_date_rud_url_name_reverse(self):
+        """
+        테스트 3. url name과 실제 url이 일치하는가
+        """
+        url = reverse(self.URL_API_DATE_RUD_NAME, args=('1', '1',))
+        self.assertEqual(url, self.URL_API_DATE + '1/')
+
+    def test_date_rud_url_resolve_view_class(self):
+        """
+        테스트 4. url을 리졸브한 결과가 url name, view와 일치하는가
+        :return:
+        """
+        resolver_match = resolve(self.URL_API_DATE + '1/')
+        self.assertEqual(resolver_match.view_name,
+                         self.URL_API_DATE_RUD_NAME)
+        self.assertEqual(resolver_match.func.view_class,
+                         self.DATE_RUD_VIEW_CLASS)
