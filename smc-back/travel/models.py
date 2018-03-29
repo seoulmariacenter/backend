@@ -42,7 +42,7 @@ class Schedule(models.Model):
     )
     transport = models.ForeignKey(
         Transport,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
     )
     description = models.TextField(blank=True, null=True)
 
