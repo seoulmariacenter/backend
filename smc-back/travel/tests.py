@@ -23,34 +23,53 @@ class ProductTest(APILiveServerTestCase):
         """
         환경 변수 설정
         """
-        self.URL_API_PRODUCT_NAME = 'travel:product_view'
+        self.URL_API_PRODUCT_LC_NAME = 'travel:product_view'
+        self.URL_API_PRODUCT_RUD_NAME = 'travel:product_detail'
         self.URL_API_PRODUCT = '/travel/product/'
         self.PRODUCT_LC_VIEW_CLASS = ProductListCreate
         self.PRODUCT_RUD_VIEW_CLASS = ProductRetrieveUpdateDestroy
         self.dummy_user = DummyUser()
         self.dummy_data = DummyData()
 
-    def test_product_url_name_reverse(self):
+    def test_product_lc_url_name_reverse(self):
         """
         테스트 1. url name과 실제 url이 일치하는가
         """
-        url = reverse(self.URL_API_PRODUCT_NAME)
+        url = reverse(self.URL_API_PRODUCT_LC_NAME)
         self.assertEqual(url, self.URL_API_PRODUCT)
 
-    def test_product_url_resolve_view_class(self):
+    def test_product_lc_url_resolve_view_class(self):
         """
         테스트 2. url을 리졸브한 결과가 url name, view와 일치하는가
         :return:
         """
         resolver_match = resolve(self.URL_API_PRODUCT)
         self.assertEqual(resolver_match.view_name,
-                         self.URL_API_PRODUCT_NAME)
+                         self.URL_API_PRODUCT_LC_NAME)
         self.assertEqual(resolver_match.func.view_class,
                          self.PRODUCT_LC_VIEW_CLASS)
 
+    def test_product_rud_url_name_reverse(self):
+        """
+        테스트 3. url name과 실제 url이 일치하는가
+        """
+        url = reverse(self.URL_API_PRODUCT_RUD_NAME, args='1')
+        self.assertEqual(url, self.URL_API_PRODUCT + '1/')
+
+    def test_product_rud_url_resolve_view_class(self):
+        """
+        테스트 4. url을 리졸브한 결과가 url name, view와 일치하는가
+        :return:
+        """
+        resolver_match = resolve(self.URL_API_PRODUCT + '1/')
+        self.assertEqual(resolver_match.view_name,
+                         self.URL_API_PRODUCT_RUD_NAME)
+        self.assertEqual(resolver_match.func.view_class,
+                         self.PRODUCT_RUD_VIEW_CLASS)
+
     def test_product_create(self):
         """
-        테스트 3. product 객체를 생성한다
+        테스트 5. product 객체를 생성한다
         """
         dummy_user = self.dummy_user
         dummy_user.create_user()
@@ -63,7 +82,7 @@ class ProductTest(APILiveServerTestCase):
 
     def test_product_list(self):
         """
-        테스트 4. product 객체의 리스트를 확인한다
+        테스트 6. product 객체의 리스트를 확인한다
         """
         dummy_user = self.dummy_user
         dummy_user.create_user()
@@ -81,7 +100,7 @@ class ProductTest(APILiveServerTestCase):
 
     def test_product_retrieve(self):
         """
-        테스트 5. product 객체의 retrieve 테스트
+        테스트 7. product 객체의 retrieve 테스트
         """
         dummy_user = self.dummy_user
         dummy_user.create_user()
@@ -92,12 +111,12 @@ class ProductTest(APILiveServerTestCase):
         self.assertEqual(response_create.status_code, 201)
 
         primary_key = str(response_create.data['pk']) + '/'
-        response_retrieve = self.client.get(self.URL_API_PRODUCT+primary_key)
+        response_retrieve = self.client.get(self.URL_API_PRODUCT + primary_key)
         self.assertEqual(response_retrieve.status_code, 200)
 
     def test_product_update(self):
         """
-        테스트 5. product 객체의 update 테스트
+        테스트 8. product 객체의 update 테스트
         """
         dummy_user = self.dummy_user
         dummy_user.create_user()
@@ -108,13 +127,13 @@ class ProductTest(APILiveServerTestCase):
         self.assertEqual(response_create.status_code, 201)
 
         primary_key = str(response_create.data['pk']) + '/'
-        response_update = self.client.patch(self.URL_API_PRODUCT+primary_key, data={'title': 'vietnam'})
+        response_update = self.client.patch(self.URL_API_PRODUCT + primary_key, data={'title': 'vietnam'})
         self.assertEqual(response_update.status_code, 200)
         self.assertEqual(response_update.data['title'], 'vietnam')
 
     def test_product_delete(self):
         """
-        테스트 6. product 객체의 delete 테스트
+        테스트 9. product 객체의 delete 테스트
         """
         dummy_user = self.dummy_user
         dummy_user.create_user()
@@ -125,5 +144,5 @@ class ProductTest(APILiveServerTestCase):
         self.assertEqual(response_create.status_code, 201)
 
         primary_key = str(response_create.data['pk']) + '/'
-        response_delete = self.client.delete(self.URL_API_PRODUCT+primary_key)
+        response_delete = self.client.delete(self.URL_API_PRODUCT + primary_key)
         self.assertEqual(response_delete.status_code, 204)
