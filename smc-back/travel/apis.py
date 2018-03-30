@@ -1,8 +1,8 @@
 from rest_framework import generics, permissions
 
 from .paginations import StandardPagination
-from .serializers import ProductSerializer, DateSerializer
-from .models import Product, Date
+from .serializers import ProductSerializer, DateSerializer, ScheduleSerializer
+from .models import Product, Date, Schedule
 
 
 class ProductListCreate(generics.ListCreateAPIView):
@@ -52,3 +52,14 @@ class DateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         product = self.kwargs['pk']
         return Date.objects.select_related('product').filter(product_id=product)
+
+
+class ScheduleListCreate(generics.ListCreateAPIView):
+    """
+    스케줄을 생성하고 리스트를 반환하는 뷰
+    스케줄 생성은 authenticated 유저만 가능
+    """
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = Schedule.objects.all()
+    serializer_class = ScheduleSerializer
+    pagination_class = StandardPagination

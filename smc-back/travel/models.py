@@ -44,6 +44,7 @@ class Schedule(models.Model):
     하루 일정 안에 담긴 하나의 스케줄
     """
     place = models.CharField(max_length=30, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     date = models.ForeignKey(
         Date,
         on_delete=models.CASCADE,
@@ -52,7 +53,6 @@ class Schedule(models.Model):
         Transport,
         on_delete=models.CASCADE,
     )
-    description = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.place

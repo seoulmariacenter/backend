@@ -366,3 +366,7 @@ class DateTest(APILiveServerTestCase):
         # date 객체 destroy
         response_destroy = self.client.delete(self.url_api_date + str(response_date.data['date_num']) +'/')
         self.assertEqual(response_destroy.status_code, 204)
+
+
+class ScheduleTest(APILiveServerTestCase):
+    pass

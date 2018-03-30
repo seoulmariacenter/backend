@@ -11,4 +11,6 @@ urlpatterns = [
     # 하루 일정 URL
     path('product/<int:pk>/date/', apis.DateListCreate.as_view(), name='date_view'),
     path('product/<int:pk>/date/<int:date_num>/', apis.DateRetrieveUpdateDestroy.as_view(), name='date_detail'),
+    # 스케줄 URL
+    path('product/<int:pk>/date/<int:date_num>/schedule/', apis.ScheduleListCreate.as_view(), name='schedule_view'),
 ]
