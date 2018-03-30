@@ -60,6 +60,14 @@ class ScheduleListCreate(generics.ListCreateAPIView):
     스케줄 생성은 authenticated 유저만 가능
     """
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    queryset = Schedule.objects.all()
     serializer_class = ScheduleSerializer
     pagination_class = StandardPagination
+
+    def get_queryset(self):
+        product = self.kwargs['pk']
+        date = self.kwargs['date_num']
+        return Schedule.objects\
+            .select_related('date__product')\
+            .select_related('date')\
+            .filter(date__product_id=product)\
+            .filter(date__date_num=date)

@@ -54,5 +54,8 @@ class Schedule(models.Model):
         on_delete=models.CASCADE,
     )
 
+    class Meta:
+        ordering = ['pk']
+
     def __str__(self):
         return self.place

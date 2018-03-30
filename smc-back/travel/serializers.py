@@ -25,7 +25,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ProductField(serializers.RelatedField):
-    queryset = Product.objects.all()
+    queryset = Product.objects.values('pk', 'title')
 
     def to_internal_value(self, data):
         return self.queryset.get(pk=data)
@@ -49,7 +49,7 @@ class DateSerializer(serializers.ModelSerializer):
 
 
 class DateField(serializers.RelatedField):
-    queryset = Date.objects.all()
+    queryset = Date.objects.values('date_num')
 
     def to_internal_value(self, data):
         return self.queryset.get(date_num=data)
@@ -59,7 +59,7 @@ class DateField(serializers.RelatedField):
 
 
 class TransportField(serializers.RelatedField):
-    queryset = Transport.objects.all()
+    queryset = Transport.objects.values('pk', 'flight_code')
 
     def to_internal_value(self, data):
         return self.queryset.get(pk=data)
