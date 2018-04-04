@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 THIRD_PARTY_APPS = [
+    'corsheaders',
     'django_extensions',
     'rest_framework',
 ]
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
                  ] + THIRD_PARTY_APPS + USER_APPS
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -110,6 +112,18 @@ JWT_AUTH = {
     'JWT_DECODE_HANDLER':
         'rest_framework_jwt.utils.jwt_decode_handler',
 }
+
+# CORS Whitelist
+# Frontend 주소의 요청을 허용해 줌
+# https://github.com/ottoyiu/django-cors-headers#cors_origin_whitelist
+CORS_ORIGIN_WHITELIST = [
+    'localhost:8080',
+]
+
+# CSRF settings
+# Frontend의 Axios와 통신을 가능케 해 줌
+# https://docs.djangoproject.com/en/2.0/ref/settings/#csrf-header-name
+CSRF_HEADER_NAME = 'HTTP_X_XSRF_TOKEN'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
