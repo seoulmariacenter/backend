@@ -49,17 +49,17 @@ class DateSerializer(serializers.ModelSerializer):
 
 
 class DateField(serializers.RelatedField):
-    queryset = Date.objects.values('date_num')
+    queryset = Date.objects.all()
 
     def to_internal_value(self, data):
-        return self.queryset.get(date_num=data)
+        return self.queryset.filter(product_id=data[0]).get(date_num=data[1])
 
     def to_representation(self, value):
         return value.date_num
 
 
 class TransportField(serializers.RelatedField):
-    queryset = Transport.objects.values('pk', 'flight_code')
+    queryset = Transport.objects.all()
 
     def to_internal_value(self, data):
         return self.queryset.get(pk=data)
