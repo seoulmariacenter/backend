@@ -25,7 +25,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ProductField(serializers.RelatedField):
-    queryset = Product.objects.values('pk', 'title')
+    queryset = Product.objects.all()
 
     def to_internal_value(self, data):
         return self.queryset.get(pk=data)
