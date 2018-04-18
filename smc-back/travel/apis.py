@@ -66,8 +66,22 @@ class ScheduleListCreate(generics.ListCreateAPIView):
     def get_queryset(self):
         product = self.kwargs['pk']
         date = self.kwargs['date_num']
-        return Schedule.objects\
-            .select_related('date__product')\
-            .select_related('date')\
-            .filter(date__product_id=product)\
+        return Schedule.objects \
+            .select_related('date__product') \
+            .select_related('date') \
+            .filter(date__product_id=product) \
             .filter(date__date_num=date)
+
+
+class ScheduleRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """
+    스케줄 필드의 디테일, 수정, 삭제를 담당하는 뷰
+    """
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = ScheduleSerializer
+    lookup_url_kwarg = 'schedule_pk'
+
+    def get_queryset(self):
+        product = self.kwargs['pk']
+        date = self.kwargs['date_num']
+        return Schedule.objects.filter(date__product_id=product).filter(date__date_num=date)
