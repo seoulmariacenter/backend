@@ -11,6 +11,7 @@ class Product(models.Model):
     start_time = models.DateField()
     end_time = models.DateField()
     price = models.CharField(max_length=10)
+    publish = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-start_time']
