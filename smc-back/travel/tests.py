@@ -1,10 +1,50 @@
+from django.contrib.auth import get_user_model
 from django.urls import reverse, resolve
+
 from rest_framework.test import APILiveServerTestCase
 
-from flight.tests import DummyUser
 from .apis import ProductListCreate, \
     ProductRetrieveUpdateDestroy, \
     DateListCreate, DateRetrieveUpdateDestroy
+
+User = get_user_model()
+
+
+class DummyUser:
+    def __init__(self):
+        """
+        자주 쓰는 데이터를 미리 정의해 둔다
+        """
+        self.data_succeed = {
+            'flight_code': 'KE001',
+            'start_iata': 'ICN',
+            'end_iata': 'FCO',
+            'start_day': '2018-04-01',
+            'end_day': '2018-04-02',
+            'start_time': '12:00',
+            'end_time': '21:00'
+        }
+        self.data_failure = {
+            'flight_code': 'KE001',
+            'start_iata': 'ABC',
+            'end_iata': 'EFG',
+            'start_day': '2018-04-01',
+            'end_day': '2018-04-02',
+            'start_time': '12:00',
+            'end_time': '21:00'
+        }
+        self.user_info = {
+            'username': 'dummy',
+            'password': 'password'
+        }
+
+    def create_user(self):
+        user = User.objects.create_user(
+            username=self.user_info['username'],
+            password=self.user_info['password'],
+        )
+        user.save()
+        return user
 
 
 class DummyData:
@@ -364,7 +404,7 @@ class DateTest(APILiveServerTestCase):
         self.assertEqual(response_date.status_code, 201)
 
         # date 객체 destroy
-        response_destroy = self.client.delete(self.url_api_date + str(response_date.data['date_num']) +'/')
+        response_destroy = self.client.delete(self.url_api_date + str(response_date.data['date_num']) + '/')
         self.assertEqual(response_destroy.status_code, 204)
 
 

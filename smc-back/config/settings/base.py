@@ -41,7 +41,6 @@ THIRD_PARTY_APPS = [
 
 USER_APPS = [
     'member',
-    'flight',
     'travel',
 ]
 

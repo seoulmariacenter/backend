@@ -24,7 +24,6 @@ urlpatterns = [
 
 urlpatterns += [
     path('member/', include('member.urls', namespace='member')),
-    path('flight/', include('flight.urls', namespace='flight')),
     path('travel/', include('travel.urls', namespace='travel')),
 ]
 

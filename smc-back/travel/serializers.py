@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from rest_framework.settings import api_settings
 
-from flight.models import Transport
 from .models import Product, Date, Schedule
 
 
@@ -95,21 +94,12 @@ class DateField(serializers.RelatedField):
         return value.date_num
 
 
-class TransportField(serializers.RelatedField):
-    queryset = Transport.objects.all()
-
-    def to_internal_value(self, data):
-        return self.queryset.get(pk=data)
-
-    def to_representation(self, value):
-        return value.flight_code
-
-
 class ScheduleSerializer(serializers.ModelSerializer):
     place = serializers.CharField(max_length=30, allow_blank=True)
-    description = serializers.CharField(allow_blank=True)
+    description = serializers.CharField()
     date = DateField()
-    transport = TransportField()
+    transport = serializers.CharField(max_length=10, allow_blank=True)
+    time = serializers.CharField(max_length=10, allow_blank=True)
 
     class Meta:
         model = Schedule
@@ -119,4 +109,5 @@ class ScheduleSerializer(serializers.ModelSerializer):
             'description',
             'date',
             'transport',
+            'time',
         )

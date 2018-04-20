@@ -1,7 +1,5 @@
 from django.db import models
 
-from flight.models import Transport
-
 
 class Product(models.Model):
     """
@@ -46,15 +44,13 @@ class Schedule(models.Model):
     하루 일정 안에 담긴 하나의 스케줄
     """
     place = models.CharField(max_length=30, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField()
     date = models.ForeignKey(
         Date,
         on_delete=models.CASCADE,
     )
-    transport = models.ForeignKey(
-        Transport,
-        on_delete=models.CASCADE,
-    )
+    transport = models.CharField(max_length=10, blank=True, null=True)
+    time = models.CharField(max_length=10, blank=True, null=True)
 
     class Meta:
         ordering = ['pk']
