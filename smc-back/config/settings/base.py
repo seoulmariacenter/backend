@@ -42,6 +42,7 @@ THIRD_PARTY_APPS = [
 USER_APPS = [
     'member',
     'travel',
+    'reservation'
 ]
 
 INSTALLED_APPS = [
