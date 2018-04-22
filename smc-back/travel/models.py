@@ -44,7 +44,7 @@ class Schedule(models.Model):
     하루 일정 안에 담긴 하나의 스케줄
     """
     place = models.CharField(max_length=30, blank=True, null=True)
-    description = models.TextField()
+    description = models.TextField(null=True)
     date = models.ForeignKey(
         Date,
         on_delete=models.CASCADE,
