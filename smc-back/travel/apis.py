@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
 
-from .paginations import StandardPagination
+from .paginations import StandardPagination, ProductPagination
 from .serializers import ProductSerializer, DateSerializer, ScheduleSerializer
 from .models import Product, Date, Schedule
 
@@ -14,7 +14,7 @@ class ProductListCreate(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    pagination_class = StandardPagination
+    pagination_class = ProductPagination
 
 
 class ProductRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
