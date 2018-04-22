@@ -37,5 +37,10 @@ class MakeReservation(APIView):
 
 
 class CheckReservation(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def post(self, request, *args, **kwargs):
+        name = request.data.get('username', '')
+        password = request.data.get('reservation_num', '')
+
         pass
