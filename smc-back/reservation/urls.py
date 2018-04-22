@@ -5,5 +5,6 @@ from . import apis
 app_name = 'reservation'
 
 urlpatterns = [
-    path('check', apis.CheckReservation.as_view(), name='check_reservation')
+    path('make/', apis.MakeReservation.as_view(), name='make_reservation'),
+    path('check/', apis.CheckReservation.as_view(), name='check_reservation')
 ]
