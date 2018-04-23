@@ -3,6 +3,8 @@ import random
 from django.contrib.auth.models import UserManager, User
 from django.db import models
 
+from travel.models import Product
+
 
 class ReservationHostManager(UserManager):
     def create_user(self, name, password=None, **extra_fields):
@@ -23,9 +25,24 @@ class ReservationHostManager(UserManager):
 
 
 class ReservationHost(User):
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE
+    )
     name = models.CharField(max_length=10, unique=False)
     phone_number = models.CharField(max_length=30, unique=False)
     gender = models.BooleanField(default=True)
     is_active = True
 
     objects = ReservationHostManager()
+
+
+class ReservationMember(models.Model):
+    host = models.ForeignKey(
+        ReservationHost,
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(max_length=10, unique=False)
+    phone_number = models.CharField(max_length=30, unique=False, null=True, blank=True)
+    gender = models.BooleanField(default=True)
+
