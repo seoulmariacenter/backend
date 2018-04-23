@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
 
-from .paginations import StandardPagination, ProductPagination
+from .paginations import StandardPagination, ProductPagination, PublishedProductPagination
 from .serializers import ProductSerializer, DateSerializer, ScheduleSerializer
 from .models import Product, Date, Schedule
 
@@ -15,6 +15,16 @@ class ProductListCreate(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = ProductPagination
+
+
+class PublishedProductList(generics.ListAPIView):
+    """
+    Publish된 순례 상품의 리스트만 반환하는 뷰
+    """
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = Product.objects.filter(publish=True)
+    serializer_class = ProductSerializer
+    pagination_class = PublishedProductPagination
 
 
 class ProductRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
