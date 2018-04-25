@@ -78,6 +78,7 @@ class CheckReservation(APIView):
         if user:
             data = {
                 'product': user.reservationhost.product.title,
+                'product_pk': user.reservationhost.product.pk,
                 'username': user.username,
                 'phone_number': user.reservationhost.phone_number,
                 'gender': user.reservationhost.gender,
