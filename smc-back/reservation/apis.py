@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from rest_framework import permissions, status
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from travel.models import Product
@@ -87,6 +88,57 @@ class CheckReservation(APIView):
             return HttpResponse(json.dumps(data),
                                 content_type='application/json; charset=utf-8',
                                 status=status.HTTP_200_OK)
+
+        else:
+            data = {
+                'message': '입력 정보가 잘못되었습니다. 다시 입력해주세요!'
+            }
+
+            return HttpResponse(json.dumps(data),
+                                content_type='application/json; charset=utf-8',
+                                status=status.HTTP_400_BAD_REQUEST)
+
+
+class CancelReservation(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def patch(self, request, *args, **kwargs):
+        name = request.data.get('name', '')
+        password = request.data.get('password', '')
+
+        user = authenticate(
+            username=name,
+            password=password,
+        )
+        if user:
+            user.is_active = False
+            return Response(status.HTTP_200_OK)
+
+        else:
+            data = {
+                'message': '입력 정보가 잘못되었습니다. 다시 입력해주세요!'
+            }
+
+            return HttpResponse(json.dumps(data),
+                                content_type='application/json; charset=utf-8',
+                                status=status.HTTP_400_BAD_REQUEST)
+
+
+class DestroyReservation(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def delete(self, request, *args, **kwargs):
+        name = request.data.get('name', '')
+        password = request.data.get('password', '')
+
+        user = authenticate(
+            username=name,
+            password=password,
+        )
+
+        if user:
+            user.delete()
+            return Response(status.HTTP_204_NO_CONTENT)
 
         else:
             data = {
