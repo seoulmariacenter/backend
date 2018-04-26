@@ -124,6 +124,13 @@ class CancelReservation(APIView):
                                 status=status.HTTP_400_BAD_REQUEST)
 
 
+class UpdateReservation(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def patch(self, request, *args, **kwargs):
+        pass
+
+
 class DestroyReservation(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
