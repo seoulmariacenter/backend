@@ -1,5 +1,7 @@
 import json
+from datetime import datetime
 
+import pytz
 from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
@@ -113,7 +115,10 @@ class CancelReservation(APIView):
             password=password,
         )
         if user:
+            user.date_canceled = datetime.now(tz=pytz.UTC)
+            user.save()
             user.is_active = False
+            user.save()
             return Response(status.HTTP_200_OK)
 
         else:
@@ -159,8 +164,8 @@ class DestroyReservation(APIView):
                                 status=status.HTTP_400_BAD_REQUEST)
 
 
-class ReservationList(generics.ListAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+class AllReservationList(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     pagination_class = StandardPagination
     serializer_class = ReservationSerializer
 
@@ -168,3 +173,14 @@ class ReservationList(generics.ListAPIView):
         product = Product.objects.all()
         select = product.get(pk=self.kwargs['pk'])
         return select.reservationhost_set.all()
+
+
+class ActiveReservationList(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    pagination_class = StandardPagination
+    serializer_class = ReservationSerializer
+
+    def get_queryset(self):
+        product = Product.objects.all()
+        select = product.get(pk=self.kwargs['pk'])
+        return select.reservationhost_set.filter(is_active=True)

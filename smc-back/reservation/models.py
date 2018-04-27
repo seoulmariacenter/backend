@@ -32,9 +32,13 @@ class ReservationHost(User):
     name = models.CharField(max_length=10, unique=False)
     phone_number = models.CharField(max_length=30, unique=False)
     gender = models.BooleanField(default=True)
+    date_canceled = models.DateTimeField(null=True, blank=True)
     is_active = True
 
     objects = ReservationHostManager()
+
+    class Meta:
+        ordering = ['-date_joined']
 
 
 class ReservationMember(models.Model):

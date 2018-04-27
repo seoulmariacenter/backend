@@ -12,5 +12,7 @@ class ReservationSerializer(serializers.ModelSerializer):
             'username',
             'phone_number',
             'gender',
-            'is_active'
+            'is_active',
+            'date_joined',
+            'date_canceled',
         )
