@@ -1,10 +1,9 @@
 import json
-from datetime import datetime
 
-import pytz
 from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
+from django.utils import timezone
 from rest_framework import permissions, status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -106,7 +105,7 @@ class CheckReservation(APIView):
 class CancelReservation(APIView):
     permission_classes = (permissions.AllowAny,)
 
-    def patch(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         name = request.data.get('name', '')
         password = request.data.get('password', '')
 
@@ -115,7 +114,7 @@ class CancelReservation(APIView):
             password=password,
         )
         if user:
-            user.date_canceled = datetime.now(tz=pytz.UTC)
+            user.date_canceled = timezone.localtime()
             user.save()
             user.is_active = False
             user.save()
