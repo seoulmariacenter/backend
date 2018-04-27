@@ -10,3 +10,7 @@ urlpatterns = [
     path('cancel/', apis.CancelReservation.as_view(), name='cancel_reservation'),
     path('destroy/', apis.DestroyReservation.as_view(), name='destroy_reservation'),
 ]
+
+urlpatterns += [
+    path('list/<int:pk>/', apis.ReservationList.as_view(), name='reservation_list'),
+]

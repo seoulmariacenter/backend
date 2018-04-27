@@ -3,12 +3,14 @@ import json
 from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
-from rest_framework import permissions, status
+from rest_framework import permissions, status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from travel.models import Product
+from travel.paginations import StandardPagination
 from .models import ReservationHost
+from .serializers import ReservationSerializer
 
 
 class MakeReservation(APIView):
@@ -155,3 +157,14 @@ class DestroyReservation(APIView):
             return HttpResponse(json.dumps(data),
                                 content_type='application/json; charset=utf-8',
                                 status=status.HTTP_400_BAD_REQUEST)
+
+
+class ReservationList(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    pagination_class = StandardPagination
+    serializer_class = ReservationSerializer
+
+    def get_queryset(self):
+        product = Product.objects.all()
+        select = product.get(pk=self.kwargs['pk'])
+        return select.reservationhost_set.all()
