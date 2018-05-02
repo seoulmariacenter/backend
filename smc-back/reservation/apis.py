@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from travel.models import Product
 from travel.paginations import StandardPagination
 from .models import ReservationHost
-from .serializers import ReservationSerializer
+from .serializers import ReservationSerializer, ReservationMemberSerializer
 
 
 class MakeReservation(APIView):
@@ -81,6 +81,7 @@ class CheckReservation(APIView):
 
         if user:
             data = {
+                'pk': user.pk,
                 'product': user.reservationhost.product.title,
                 'product_pk': user.reservationhost.product.pk,
                 'username': user.username,
@@ -141,13 +142,9 @@ class DestroyReservation(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def delete(self, request, *args, **kwargs):
-        name = request.data.get('name', '')
-        password = request.data.get('password', '')
+        pk = request.data.get('pk', '')
 
-        user = authenticate(
-            username=name,
-            password=password,
-        )
+        user = ReservationHost.objects.get(pk=pk)
 
         if user:
             user.delete()
@@ -183,3 +180,14 @@ class ActiveReservationList(generics.ListAPIView):
         product = Product.objects.all()
         select = product.get(pk=self.kwargs['pk'])
         return select.reservationhost_set.filter(is_active=True)
+
+
+class MakeReservationMember(generics.ListCreateAPIView):
+    permission_classes = (permissions.AllowAny,)
+    pagination_class = StandardPagination
+    serializer_class = ReservationMemberSerializer
+
+    def get_queryset(self):
+        host = ReservationHost.objects.all()
+        select = host.get(pk=self.kwargs['pk'])
+        return select.reservationmember_set.all()
