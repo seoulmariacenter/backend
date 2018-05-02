@@ -26,5 +26,6 @@ class ReservationMemberSerializer(serializers.ModelSerializer):
             'host',
             'name',
             'phone_number',
-            'gender'
+            'gender',
+            'is_adult'
         )

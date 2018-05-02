@@ -49,6 +49,7 @@ class ReservationMember(models.Model):
     name = models.CharField(max_length=10, unique=False)
     phone_number = models.CharField(max_length=30, unique=False, null=True, blank=True)
     gender = models.BooleanField(default=True)
+    is_adult = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['pk']
