@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from .paginations import StandardPagination, ProductPagination, PublishedProductPagination
 from .serializers import ProductSerializer, DateSerializer, ScheduleSerializer
@@ -35,6 +36,7 @@ class ProductRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    parser_classes = (MultiPartParser, FormParser,)
 
 
 class DateListCreate(generics.ListCreateAPIView):
