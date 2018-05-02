@@ -119,10 +119,16 @@ class CancelReservation(APIView):
             password=password,
         )
         if user:
-            user.date_canceled = timezone.localtime()
-            user.save()
-            user.is_active = False
-            user.save()
+            product = user.reservationhost.product_id
+            host = user.pk
+
+            queryset = Product.objects.get(pk=product)
+            instance = queryset.reservationhost_set.get(pk=host)
+            instance.date_canceled = timezone.localtime()
+            instance.save()
+            instance.is_active = False
+            instance.save()
+
             return Response(status.HTTP_200_OK)
 
         else:
