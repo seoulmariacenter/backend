@@ -12,11 +12,14 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('list/<int:pk>/', apis.AllReservationList.as_view(), name='reservation_list'),
-    path('list/<int:pk>/active/', apis.ActiveReservationList.as_view(), name='reservation_list'),
+    path('list/<int:product_pk>/', apis.AllReservationList.as_view(), name='reservation_list'),
+    path('list/<int:product_pk>/active/', apis.ActiveReservationList.as_view(), name='reservation_list'),
+    path('detail/<int:product_pk>/<int:host_pk>/', apis.ReservationHostRetrieveDestroy.as_view(),
+         name='reservation_detail')
 ]
 
 urlpatterns += [
-    path('member/<int:pk>/', apis.ReservationMemberListCreate.as_view(), name='reservation_member'),
-    path('member/<int:pk>/detail/<int:member_pk>/', apis.ReservationMemberUpdateDestroy.as_view(), name='member_detail')
+    path('member/<int:host_pk>/', apis.ReservationMemberListCreate.as_view(), name='reservation_member'),
+    path('member/<int:host_pk>/detail/<int:member_pk>/', apis.ReservationMemberRetrieveUpdateDestroy.as_view(),
+         name='member_detail')
 ]
