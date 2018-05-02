@@ -182,10 +182,21 @@ class ActiveReservationList(generics.ListAPIView):
         return select.reservationhost_set.filter(is_active=True)
 
 
-class MakeReservationMember(generics.ListCreateAPIView):
+class ReservationMemberListCreate(generics.ListCreateAPIView):
     permission_classes = (permissions.AllowAny,)
     pagination_class = StandardPagination
     serializer_class = ReservationMemberSerializer
+
+    def get_queryset(self):
+        host = ReservationHost.objects.all()
+        select = host.get(pk=self.kwargs['pk'])
+        return select.reservationmember_set.all()
+
+
+class ReservationMemberUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = ReservationMemberSerializer
+    lookup_url_kwarg = 'member_pk'
 
     def get_queryset(self):
         host = ReservationHost.objects.all()

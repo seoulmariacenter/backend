@@ -17,5 +17,6 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('member/<int:pk>/', apis.MakeReservationMember.as_view(), name='reservation_member')
+    path('member/<int:pk>/', apis.ReservationMemberListCreate.as_view(), name='reservation_member'),
+    path('member/<int:pk>/detail/<int:member_pk>/', apis.ReservationMemberUpdateDestroy.as_view(), name='member_detail')
 ]
