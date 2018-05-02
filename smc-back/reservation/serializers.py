@@ -10,6 +10,7 @@ class ReservationSerializer(serializers.ModelSerializer):
             'pk',
             'product',
             'username',
+            'christian_name',
             'phone_number',
             'gender',
             'is_active',
@@ -25,6 +26,7 @@ class ReservationMemberSerializer(serializers.ModelSerializer):
             'pk',
             'host',
             'name',
+            'christian_name',
             'phone_number',
             'gender',
             'is_adult'

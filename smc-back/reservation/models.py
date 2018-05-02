@@ -30,6 +30,7 @@ class ReservationHost(User):
         on_delete=models.CASCADE
     )
     name = models.CharField(max_length=10, unique=False)
+    christian_name = models.CharField(max_length=20, unique=False, null=True, blank=True)
     phone_number = models.CharField(max_length=30, unique=False)
     gender = models.BooleanField(default=True)
     date_canceled = models.DateTimeField(null=True, blank=True)
@@ -47,6 +48,7 @@ class ReservationMember(models.Model):
         on_delete=models.CASCADE
     )
     name = models.CharField(max_length=10, unique=False)
+    christian_name = models.CharField(max_length=20, unique=False, null=True, blank=True)
     phone_number = models.CharField(max_length=30, unique=False, null=True, blank=True)
     gender = models.BooleanField(default=True)
     is_adult = models.BooleanField(default=True)

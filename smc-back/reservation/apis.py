@@ -19,6 +19,7 @@ class MakeReservation(APIView):
 
     def post(self, request, *args, **kwargs):
         name = request.data.get('username', '')
+        christian_name = request.data.get('christian_name', '')
         phone_number = request.data.get('phone_number', '')
         gender = request.data.get('gender', True)
         product = request.data.get('product', '')
@@ -36,6 +37,7 @@ class MakeReservation(APIView):
 
         user, reservation_num_list = ReservationHost.objects.create_user(
             name=name,
+            christian_name=christian_name,
             phone_number=phone_number,
             gender=gender,
             product=product_object,
@@ -45,6 +47,7 @@ class MakeReservation(APIView):
             data = {
                 'product': user.product.title,
                 'username': user.username,
+                'christian_name': user.christian_name,
                 'phone_number': user.phone_number,
                 'gender': user.gender,
                 'reservation_num': f'{reservation_num_list[0]}-'
@@ -85,6 +88,7 @@ class CheckReservation(APIView):
                 'product': user.reservationhost.product.title,
                 'product_pk': user.reservationhost.product.pk,
                 'username': user.username,
+                'christian_name': user.reservationhost.christian_name,
                 'phone_number': user.reservationhost.phone_number,
                 'gender': user.reservationhost.gender,
             }
