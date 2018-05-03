@@ -1,4 +1,5 @@
 # Custom
+dist_front/
 secrets.json
 .static_root/
 .media/
