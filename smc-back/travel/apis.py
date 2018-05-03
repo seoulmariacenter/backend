@@ -28,6 +28,25 @@ class PublishedProductList(generics.ListAPIView):
     pagination_class = PublishedProductPagination
 
 
+class PublishedProductRetrieve(generics.RetrieveAPIView):
+    """
+    publish된 순례 상품의 디테일 뷰
+    """
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = Product.objects.filter(publish=True)
+    serializer_class = ProductSerializer
+
+
+class ProductImageUpdate(generics.UpdateAPIView):
+    """
+    순례 상품의 이미지 업로드를 담당하는 뷰
+    """
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    parser_classes = (MultiPartParser, FormParser,)
+
+
 class ProductRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
     순례 상품의 디테일, 수정, 삭제를 담당하는 뷰
@@ -36,7 +55,6 @@ class ProductRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    parser_classes = (MultiPartParser, FormParser,)
 
 
 class DateListCreate(generics.ListCreateAPIView):

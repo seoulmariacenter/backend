@@ -10,7 +10,7 @@ class ProductSerializer(serializers.ModelSerializer):
     end_time = serializers.DateField()
     price = serializers.CharField(max_length=10)
     publish = serializers.BooleanField(default=False)
-    image = serializers.ImageField(allow_empty_file=True)
+    image = serializers.ImageField(allow_empty_file=True, allow_null=True)
 
     class Meta:
         model = Product
@@ -21,6 +21,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'end_time',
             'price',
             'publish',
+            'description',
             'image'
         )
 
