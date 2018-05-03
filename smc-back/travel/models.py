@@ -11,6 +11,7 @@ class Product(models.Model):
     price = models.CharField(max_length=10)
     publish = models.BooleanField(default=False)
     image = models.ImageField(blank=True)
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         ordering = ['-start_time']
