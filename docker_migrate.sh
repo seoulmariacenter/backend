@@ -3,3 +3,4 @@
 cd smc-back
 /root/.pyenv/versions/app/bin/python manage.py collectstatic --noinput
 /root/.pyenv/versions/app/bin/python manage.py migrate --noinput
+/root/.pyenv/versions/app/bin/python manage.py create_su

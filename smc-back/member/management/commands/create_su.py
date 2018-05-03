@@ -1,20 +1,16 @@
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
 from django.core.management import BaseCommand
+
+User = get_user_model()
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        user = User.objects.get(
+        new_user = User.objects.create_superuser(
             username=settings.SUPERUSER_USERNAME,
+            email='',
+            password=settings.SUPERUSER_PASSWORD,
         )
-
-        if not user:
-            new_user = User.objects.create_superuser(
-                username=settings.SUPERUSER_USERNAME,
-                password=settings.SUPERUSER_PASSWORD,
-            )
-            print(f'관리자 아이디 "{new_user}"가 생성되었습니다')
-
-        else:
-            print(f'관리자 아이디 "{user}"가 이미 존재합니다')
+        print(f'관리자 아이디 "{new_user}"가 생성되었습니다')
