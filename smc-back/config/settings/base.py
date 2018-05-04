@@ -118,6 +118,8 @@ JWT_AUTH = {
 # https://github.com/ottoyiu/django-cors-headers#cors_origin_whitelist
 CORS_ORIGIN_WHITELIST = [
     'localhost:8080',
+    'seoulmariacenter.net',
+    'api.seoulmariacenter.net',
 ]
 
 # CSRF settings
