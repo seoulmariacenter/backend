@@ -30,7 +30,11 @@ MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 # Allowed hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    'seoulmariacenter.net',
+    'api.seoulmariacenter.net'
+]
 
 # Application definition
 THIRD_PARTY_APPS = [
